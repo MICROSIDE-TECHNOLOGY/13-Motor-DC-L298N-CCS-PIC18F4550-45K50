@@ -1,0 +1,31 @@
+on: [push]
+
+jobs:
+  gist-sync:
+    name: gist-sync
+    runs-on: ubuntu-latest
+    steps:
+    #PIC18F4550
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: vhperaltaj/gist-sync-action@v1.0.0
+        id: PIC18F4550
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gist_url: https://gist.github.com/microside-mx/8d7d5d61eea0c256f393aca6b7e9ca83
+          gist_title: 13-MotorDC-CCS-4550.c
+          gist_description: Prácticas PIC CCS
+          github_file: Proyecto/PIC18F4550/Motor DC + Driver L298N.c
+          file_encoding: WINDOWS-1252
+    #PIC18F45K50
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: vhperaltaj/gist-sync-action@v1.0.0
+        id: PIC18F45K50
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gist_url: https://gist.github.com/microside-mx/66982834d4c1355b57a45beb00e71f6e
+          gist_title: 13-MotorDC-CCS.c
+          gist_description: Prácticas PIC CCS
+          github_file: Proyecto/PIC18F45K50/Motor DC + Driver L298N.c
+          file_encoding: WINDOWS-1252
