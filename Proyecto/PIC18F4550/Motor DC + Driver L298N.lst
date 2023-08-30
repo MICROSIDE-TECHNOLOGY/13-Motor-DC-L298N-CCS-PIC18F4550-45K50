@@ -1,6 +1,8 @@
-CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:10
+CCS PCH C Compiler, Version 5.115d, 1               30-ago.-23 16:38
+Compiler operating in Evaluation Mode
+To obtain a fully enabled compiler visit www.ccsinfo.com/products
 
-               Filename:   C:\Users\Martin Hdez\Desktop\18F4550\13 Motor DC + Driver L298N\Motor DC + Driver L298N.lst
+               Filename:   C:\Users\victo\OneDrive\Documentos\X-TRAINER-hands-on\CCS\PIC18F\13-Motor-DC-L298N-CCS-PIC18F4550-45K50\Proyecto\PIC18F4550\Motor DC + Driver L298N.lst
 
                ROM used:   444 bytes (1%)
                            Largest free fragment is 24128
@@ -11,10 +13,15 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:10
 
 *
 2000:  GOTO   2030
-.................... /*
-.................... AUTOR: MICROSIDE TECHNOLOGY S.A. DE C.V.
-.................... FECHA: JUNIO 2019
-.................... */
+.................... /************************************************************************************************
+.................... Company:
+.................... Microside Technology Inc.
+.................... File Name:
+.................... Motor DC + Driver L298N.c
+.................... Product Revision  :  1
+.................... Device            :  X-TRAINER
+.................... Driver Version    :  1.0
+.................... ************************************************************************************************/
 .................... 
 .................... /*
 .................... ---------------------------------------------------------------------------
@@ -23,10 +30,10 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:10
 .................... ---------------------------------------------------------------------------
 .................... */
 .................... 
-.................... #include <18F4550.h>                            //Incluye el microcontrolador con el que se va a trabajar 
+.................... #include <18F4550.h>                           // Incluye el microcontrolador con el que se va a trabajar 
 .................... //////////// Standard Header file for the PIC18F4550 device ////////////////
 .................... ///////////////////////////////////////////////////////////////////////////
-.................... ////        (C) Copyright 1996, 2014 Custom Computer Services          ////
+.................... ////        (C) Copyright 1996, 2020 Custom Computer Services          ////
 .................... //// This source code may only be used by licensed users of the CCS C  ////
 .................... //// compiler.  This source code may only be distributed to other      ////
 .................... //// licensed users of the CCS C compiler.  No other use, reproduction ////
@@ -38,7 +45,7 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:10
 .................... 
 .................... #list
 .................... 
-.................... #use delay(clock=48Mhz, crystal)                //Tipo de oscilador y frecuencia dependiendo del microcontrolador 
+.................... #use delay( clock=48Mhz, crystal )             // Tipo de oscilador y frecuencia dependiendo del microcontrolador 
 *
 2008:  CLRF   FEA
 200A:  MOVLW  08
@@ -60,17 +67,17 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:10
 202A:  DECFSZ FEF,F
 202C:  BRA    2012
 202E:  RETURN 0
-.................... #build(reset=0x02000,interrupt=0x02008)         //Asignación de los vectores de reset e interrupción
-.................... #org 0x0000,0x1FFF {}                           //Reserva espacio en la memoria para la versión con bootloader
+.................... #build( reset=0x02000, interrupt=0x02008 )     // Asignación de los vectores de reset e interrupción
+.................... #org 0x0000,0x1FFF {}                          // Reserva espacio en la memoria para la versión con bootloader
 .................... 
 .................... #define IN_1 pin_C0
 .................... #define IN_2 pin_C1
 .................... 
-.................... int16 VELOCIDAD=0;                              //Variable para ajustar el valor del PWM1 en CCP1
+.................... int16 VELOCIDAD=0;                             // Variable para ajustar el valor del PWM1 en CCP1
 .................... 
-.................... int1 SUBE=1;                                    //Variable para control de ascenso y descenso del valor del PWM
+.................... int1 SUBE=1;                                   // Variable para control de ascenso y descenso del valor del PWM
 .................... 
-.................... void main()
+.................... void main( void ) {
 2030:  CLRF   FF8
 2032:  BCF    FD0.7
 2034:  CLRF   05
@@ -82,32 +89,31 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:10
 2040:  MOVWF  FC1
 2042:  MOVLW  07
 2044:  MOVWF  FB4
-.................... {
-....................       setup_timer_2 (T2_DIV_BY_16, 255, 1);                            //Configura Timer2, periodo ajustado a 342uS
+....................    setup_timer_2 (T2_DIV_BY_16, 255, 1);       // Configura Timer2, periodo ajustado a 342uS
 2046:  MOVLW  00
 2048:  IORLW  06
 204A:  MOVWF  FCA
 204C:  MOVLW  FF
 204E:  MOVWF  FCB
-....................       setup_ccp1 (CCP_PWM|CCP_SHUTDOWN_AC_L|CCP_SHUTDOWN_BD_L);        //Configura el módulo CCP para uso del PWM
+....................    setup_ccp1 (CCP_PWM|CCP_SHUTDOWN_AC_L|CCP_SHUTDOWN_BD_L); // Configura el módulo CCP para uso del PWM
 2050:  BCF    F94.2
 2052:  BCF    F8B.2
 2054:  MOVLW  0C
 2056:  MOVWF  FBD
 2058:  CLRF   FB7
 205A:  CLRF   FB6
-....................       while (TRUE)
-....................             {
-....................                 output_bit (IN_1, 1);                                  //Dirección del motor
+....................    
+....................    while ( 1 ) {
+....................       output_bit( IN_1, 1 );                   // Dirección del motor
 205C:  BSF    F8B.0
 205E:  BCF    F94.0
-....................                 output_bit (IN_2, 0) ;
+....................       output_bit( IN_2, 0 );
 2060:  BCF    F8B.1
 2062:  BCF    F94.1
-....................                 SUBE = 1;
+....................       SUBE = 1;
 2064:  BSF    06.0
 .................... 
-....................                  while (VELOCIDAD < 1020&&SUBE)
+....................       while ( VELOCIDAD < 1020 && SUBE ) {     // Se va incrementando del valor en el PWM hasta el máximo
 2066:  MOVF   05,W
 2068:  SUBLW  03
 206A:  BNC   20AE
@@ -117,14 +123,12 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:10
 2072:  BNC   20AE
 2074:  BTFSS  06.0
 2076:  BRA    20AE
-....................                        {
-....................                                                                        //Se va incrementando del valor en el PWM hasta el máximo
-....................                               VELOCIDAD += 5;                          //Se incrementa en pasos de 15 el ciclo de trabajo
+....................          VELOCIDAD += 5;                       // Se incrementa en pasos de 15 el ciclo de trabajo
 2078:  MOVLW  05
 207A:  ADDWF  04,F
 207C:  MOVLW  00
 207E:  ADDWFC 05,F
-....................                               set_pwm1_duty (VELOCIDAD);               
+....................          set_pwm1_duty( VELOCIDAD );
 2080:  MOVFF  05,02
 2084:  MOVFF  04,01
 2088:  RRCF   02,F
@@ -141,17 +145,17 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:10
 20A0:  ANDLW  CF
 20A2:  IORWF  00,W
 20A4:  MOVWF  FBD
-....................                               delay_ms (40);                           //retardo
+....................          delay_ms( 40 );
 20A6:  MOVLW  28
 20A8:  MOVWF  08
 20AA:  RCALL  2008
 20AC:  BRA    2066
-....................                         }
+....................       }
 .................... 
-....................                      SUBE = 0;
+....................       SUBE = 0;
 20AE:  BCF    06.0
 .................... 
-....................                  while (VELOCIDAD > 5&& ! SUBE)
+....................       while ( VELOCIDAD > 5 && !SUBE ) {       // Se va reduciendo el valor en el PWM hasta el mí­nimo
 20B0:  MOVF   05,F
 20B2:  BNZ   20BA
 20B4:  MOVF   04,W
@@ -159,14 +163,12 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:10
 20B8:  BC    20F4
 20BA:  BTFSC  06.0
 20BC:  BRA    20F4
-....................                           {
-....................                                                                         //Se va reduciendo el valor en el PWM hasta el mí­nimo
-....................                                   VELOCIDAD -= 5;                       //Se reduce en pasos de 15 el ciclo de trabajo
+....................          VELOCIDAD -= 5;                       // Se reduce en pasos de 15 el ciclo de trabajo
 20BE:  MOVLW  05
 20C0:  SUBWF  04,F
 20C2:  MOVLW  00
 20C4:  SUBWFB 05,F
-....................                                   set_pwm1_duty (VELOCIDAD);            
+....................          set_pwm1_duty( VELOCIDAD );
 20C6:  MOVFF  05,02
 20CA:  MOVFF  04,01
 20CE:  RRCF   02,F
@@ -183,22 +185,22 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:10
 20E6:  ANDLW  CF
 20E8:  IORWF  00,W
 20EA:  MOVWF  FBD
-....................                                   delay_ms (40) ;
+....................          delay_ms( 40 );
 20EC:  MOVLW  28
 20EE:  MOVWF  08
 20F0:  RCALL  2008
 20F2:  BRA    20B0
-....................                             }
+....................       }
 .................... 
-....................                             SUBE = 1;
+....................       SUBE = 1;
 20F4:  BSF    06.0
-....................                             output_bit (IN_1, 0);                       //Alto del motor
+....................       output_bit( IN_1, 0 );                   // Alto del motor
 20F6:  BCF    F8B.0
 20F8:  BCF    F94.0
-....................                             output_bit (IN_2, 0);
+....................       output_bit( IN_2, 0 );
 20FA:  BCF    F8B.1
 20FC:  BCF    F94.1
-....................                             delay_ms (1000) ;
+....................       delay_ms( 1000 );
 20FE:  MOVLW  04
 2100:  MOVWF  07
 2102:  MOVLW  FA
@@ -207,16 +209,16 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:10
 2108:  DECFSZ 07,F
 210A:  BRA    2102
 .................... 
-....................                            output_bit (IN_1, 0);                        //Dirección del motor
+....................       output_bit( IN_1, 0 );                   // Dirección del motor
 210C:  BCF    F8B.0
 210E:  BCF    F94.0
-....................                            output_bit (IN_2, 1) ;
+....................       output_bit( IN_2, 1 );
 2110:  BSF    F8B.1
 2112:  BCF    F94.1
-....................                             SUBE = 1;
+....................       SUBE = 1;
 2114:  BSF    06.0
 .................... 
-....................                     while (VELOCIDAD < 1020&&SUBE)
+....................       while ( VELOCIDAD < 1020 && SUBE ) {     // Se va incrementando del valor en el PWM hasta el máximo
 2116:  MOVF   05,W
 2118:  SUBLW  03
 211A:  BNC   215E
@@ -226,14 +228,12 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:10
 2122:  BNC   215E
 2124:  BTFSS  06.0
 2126:  BRA    215E
-....................                              {
-....................                                                                          //Se va incrementando del valor en el PWM hasta el máximo
-....................                                    VELOCIDAD += 5;                       //Se incrementa en pasos de 15 el ciclo de trabajo
+....................          VELOCIDAD += 5;                       // Se incrementa en pasos de 15 el ciclo de trabajo
 2128:  MOVLW  05
 212A:  ADDWF  04,F
 212C:  MOVLW  00
 212E:  ADDWFC 05,F
-....................                                    set_pwm1_duty (VELOCIDAD);            
+....................          set_pwm1_duty( VELOCIDAD );
 2130:  MOVFF  05,02
 2134:  MOVFF  04,01
 2138:  RRCF   02,F
@@ -250,17 +250,17 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:10
 2150:  ANDLW  CF
 2152:  IORWF  00,W
 2154:  MOVWF  FBD
-....................                                    delay_ms (40);                       
+....................          delay_ms( 40 );
 2156:  MOVLW  28
 2158:  MOVWF  08
 215A:  RCALL  2008
 215C:  BRA    2116
-....................                               }
+....................       }
 .................... 
-....................                              SUBE = 0;
+....................       SUBE = 0;
 215E:  BCF    06.0
 .................... 
-....................                       while (VELOCIDAD > 5&& ! SUBE)
+....................       while ( VELOCIDAD > 5 && !SUBE ) {       // Se va reduciendo el valor en el PWM hasta el mí­nimo
 2160:  MOVF   05,F
 2162:  BNZ   216A
 2164:  MOVF   04,W
@@ -268,14 +268,12 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:10
 2168:  BC    21A4
 216A:  BTFSC  06.0
 216C:  BRA    21A4
-....................                                {
-....................                                                                          //Se va reduciendo el valor en el PWM hasta el mínimo
-....................                                      VELOCIDAD -= 5;                     //Se reduce en pasos de 15 el ciclo de trabajo
+....................          VELOCIDAD -= 5;                       // Se reduce en pasos de 15 el ciclo de trabajo
 216E:  MOVLW  05
 2170:  SUBWF  04,F
 2172:  MOVLW  00
 2174:  SUBWFB 05,F
-....................                                      set_pwm1_duty (VELOCIDAD);          
+....................          set_pwm1_duty( VELOCIDAD );
 2176:  MOVFF  05,02
 217A:  MOVFF  04,01
 217E:  RRCF   02,F
@@ -292,23 +290,23 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:10
 2196:  ANDLW  CF
 2198:  IORWF  00,W
 219A:  MOVWF  FBD
-....................                                      delay_ms (40) ;
+....................          delay_ms( 40 );
 219C:  MOVLW  28
 219E:  MOVWF  08
 21A0:  RCALL  2008
 21A2:  BRA    2160
-....................                                 }
+....................       }
 .................... 
-....................                           SUBE = 1;
+....................       SUBE = 1;
 21A4:  BSF    06.0
-....................                           output_bit (IN_1, 0);                          //Alto del motor
+....................       output_bit( IN_1, 0 );                   // Alto del motor
 21A6:  BCF    F8B.0
 21A8:  BCF    F94.0
-....................                           output_bit (IN_2, 0);
+....................       output_bit( IN_2, 0 );
 21AA:  BCF    F8B.1
 21AC:  BCF    F94.1
 .................... 
-....................                           delay_ms (500) ;
+....................       delay_ms( 500 );
 21AE:  MOVLW  02
 21B0:  MOVWF  07
 21B2:  MOVLW  FA
@@ -317,13 +315,13 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 12:10
 21B8:  DECFSZ 07,F
 21BA:  BRA    21B2
 21BC:  BRA    205C
-....................             }
+....................    }
 .................... }
 21BE:  SLEEP 
 
 Configuration Fuses:
    Word  1: CC07   PLL12 CPUDIV1 NOUSBDIV HS FCMEN IESO
-   Word  2: 1E26   PUT BROWNOUT VREGEN NOWDT WDT32768
+   Word  2: 1E3E   PUT BROWNOUT BORV21 VREGEN NOWDT WDT32768
    Word  3: 8700   CCP2C1 PBADEN LPT1OSC MCLR
    Word  4: 00A1   STVREN NOLVP ICSP2 NOXINST NODEBUG
    Word  5: C00F   NOPROTECT NOCPB NOCPD
